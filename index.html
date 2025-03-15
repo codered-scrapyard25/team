@@ -1,110 +1,99 @@
-<script>
-    // Team members data
-    const teamMembers = [
-        {
-            id: 1,
-            name: "Vaibhav",
-            nickname: "YB",
-            role: "Lead Developer",
-            bio: "Specializes in backend architecture and database optimization. Known for solving complex problems with elegant solutions. Always has a cup of coffee nearby.",
-            avatar: "V"
-        },
-        {
-            id: 2,
-            name: "Veekshith",
-            nickname: "Veek",
-            role: "Frontend Specialist",
-            bio: "UI/UX expert who turns wireframes into beautiful interfaces. Has an eye for detail and can spot a misaligned pixel from miles away.",
-            avatar: "V"
-        },
-        {
-            id: 3,
-            name: "Snithik",
-            nickname: "Snikki",
-            role: "Systems Engineer",
-            bio: "Infrastructure guru who makes sure everything runs smoothly behind the scenes. Can debug a server in his sleep.",
-            avatar: "S"
-        },
-        {
-            id: 4,
-            name: "Jimit",
-            nickname: "JimJam",
-            role: "Project Manager",
-            bio: "Keeps the team organized and projects on schedule. Master of agile methodologies and team motivation. Always has a plan B.",
-            avatar: "J"
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeRed Team</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
         }
-    ];
 
-    // DOM elements
-    const loader = document.getElementById('loader');
-    const container = document.getElementById('container');
-    const teamGrid = document.getElementById('team-grid');
-    const modalBackdrop = document.getElementById('modal-backdrop');
-    const closeButton = document.getElementById('close-button');
-    const modalName = document.getElementById('modal-name');
-    const modalNickname = document.getElementById('modal-nickname');
-    const modalRole = document.getElementById('modal-role');
-    const modalBioText = document.getElementById('modal-bio-text');
-    const modalImg = document.getElementById('modal-img');
-
-    // Create member cards
-    function createMemberCards() {
-        teamMembers.forEach(member => {
-            const card = document.createElement('div');
-            card.className = 'member-card';
-            card.dataset.memberId = member.id;
-
-            card.innerHTML = `
-                <div class="card-glow"></div>
-                <div class="card-content">
-                    <div class="avatar-container">
-                        <div class="avatar">
-                            <img src="/api/placeholder/160/160" alt="${member.name}">
-                        </div>
-                    </div>
-                    <div class="info">
-                        <h3 class="member-name">${member.name}</h3>
-                        <p class="member-nickname">"${member.nickname}"</p>
-                        <p class="member-role">${member.role}</p>
-                    </div>
-                </div>
-            `;
-
-            card.addEventListener('click', () => showMemberDetails(member));
-            teamGrid.appendChild(card);
-        });
-    }
-
-    // Show member details in modal
-    function showMemberDetails(member) {
-        modalName.textContent = member.name;
-        modalNickname.textContent = `"${member.nickname}"`;
-        modalRole.textContent = member.role;
-        modalBioText.textContent = member.bio;
-
-        modalBackdrop.classList.add('active');
-    }
-
-    // Close modal
-    function closeModal() {
-        modalBackdrop.classList.remove('active');
-    }
-
-    // Event listeners
-    closeButton.addEventListener('click', closeModal);
-    modalBackdrop.addEventListener('click', (e) => {
-        if (e.target === modalBackdrop) {
-            closeModal();
+        .banner-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
         }
-    });
 
-    // Simulate loading process and hide loader
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            loader.classList.add('hidden'); // Hide loader with transition
-            container.style.display = 'flex'; // Show main content
-        }, 1000); // Simulated delay for loader (1 second)
+        .banner {
+            width: 200px;
+            height: 100px;
+            border: 5px solid red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: border-color 0.3s ease;
+            cursor: pointer;
+        }
 
-        createMemberCards(); // Populate team grid after loading
-    });
-</script>
+        .banner:hover {
+            border-color: darkred;
+        }
+
+        .expanded-banner-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            /* semi-transparent black */
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .expanded-banner {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 style="text-align:center;">CodeRed</h1>
+    <h2 style="text-align:center;">The best Scrapyard team in existence.</h2>
+
+    <div class="banner-container">
+        <div class="banner" onclick="expandBanner('Vaibhav')">Vaibhav (YB)</div>
+        <div class="banner" onclick="expandBanner('Veekshith')">Veekshith (Veek)</div>
+        <div class="banner" onclick="expandBanner('Snithik')">Snithik (Snikki)</div>
+        <div class="banner" onclick="expandBanner('Jimit')">Jimit (JimJam)</div>
+    </div>
+
+    <div id="expandedBannerContainer" class="expanded-banner-container">
+        <span class="close-button" onclick="closeBanner()">X</span>
+        <div id="expandedBanner" class="expanded-banner"></div>
+    </div>
+
+    <script>
+        function expandBanner(member) {
+            const bannerDiv = document.getElementById('expandedBanner');
+            bannerDiv.innerHTML = `<h2 style='color:white;'>${member}</h2>`;
+            document.getElementById('expandedBannerContainer').style.display = 'flex';
+        }
+
+        function closeBanner() {
+            document.getElementById('expandedBannerContainer').style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>
