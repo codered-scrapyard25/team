@@ -1,244 +1,616 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="en">
 
-const CodeRedTeamIntro = () => {
-const [selectedMember, setSelectedMember] = useState(null);
-const [loading, setLoading] = useState(true);
-const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
-const [clickedMemberId, setClickedMemberId] = useState(null);
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeRed Team</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-useEffect(() => {
-// Simulate loading time
-const timer = setTimeout(() => {
-setLoading(false);
-}, 2000);
+        body {
+            background-color: black;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
 
-return () => clearTimeout(timer);
-}, []);
+        .header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
 
-const teamMembers = [
-{
-id: 1,
-name: "Vaibhav",
-nickname: "YB",
-role: "Lead Developer",
-bio: "Specializes in backend architecture and database optimization. Known for solving complex problems with elegant
-solutions. Always has a cup of coffee nearby.",
-avatar: "V"
-},
-{
-id: 2,
-name: "Veekshith",
-nickname: "Veek",
-role: "Frontend Specialist",
-bio: "UI/UX expert who turns wireframes into beautiful interfaces. Has an eye for detail and can spot a misaligned pixel
-from miles away.",
-avatar: "V"
-},
-{
-id: 3,
-name: "Snithik",
-nickname: "Snikki",
-role: "Systems Engineer",
-bio: "Infrastructure guru who makes sure everything runs smoothly behind the scenes. Can debug a server in his sleep.",
-avatar: "S"
-},
-{
-id: 4,
-name: "Jimit",
-nickname: "JimJam",
-role: "Project Manager",
-bio: "Keeps the team organized and projects on schedule. Master of agile methodologies and team motivation. Always has a
-plan B.",
-avatar: "J"
-}
-];
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
 
-const handleSelectMember = (member, event) => {
-// Capture click position for zoom effect
-const rect = event.currentTarget.getBoundingClientRect();
-setClickPosition({
-x: rect.left + rect.width / 2,
-y: rect.top + rect.height / 2
-});
-setClickedMemberId(member.id);
+        .header span {
+            color: #DC2626;
+        }
 
-// Short delay before showing the expanded view
-setTimeout(() => {
-setSelectedMember(member);
-}, 100);
-};
+        .header p {
+            color: #9CA3AF;
+            font-style: italic;
+        }
 
-const handleClose = () => {
-setSelectedMember(null);
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
 
-// Reset clicked member after animation completes
-setTimeout(() => {
-setClickedMemberId(null);
-}, 500);
-};
+        .team-card {
+            position: relative;
+            width: 16rem;
+            height: 8rem;
+            background-color: black;
+            border: 2px solid rgba(220, 38, 38, 0.7);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-if (loading) {
-return (
-<div className="w-full h-screen flex items-center justify-center bg-black">
-    <div className="animate-spin w-16 h-16 relative">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-            <path d="M50 10 L50 50 L90 50 L90 90 L50 90 L50 50 L10 50 L10 10 Z" fill="none" stroke="#DC2626"
-                strokeWidth="8" />
-        </svg>
-    </div>
-</div>
-);
-}
+        .team-card.zooming {
+            opacity: 0;
+            transform: scale(1.5);
+        }
 
-return (
-<div className="w-full h-full min-h-screen flex flex-col items-center justify-center bg-black p-8">
-    <div className="mb-12 text-center">
-        <h1 className="text-5xl font-bold text-white mb-3">
-            <span className="text-red-600">Code</span>Red
-        </h1>
-        <p className="text-gray-400 italic">"The best Scrapyard team in existence."</p>
-    </div>
+        .team-card .border-glow {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: all 0.7s;
+            z-index: 10;
+            pointer-events: none;
+        }
 
-    <div className="flex flex-row gap-6 justify-center flex-wrap">
-        {teamMembers.map((member) => (
-        <div key={member.id} onClick={(e)=> handleSelectMember(member, e)}
-            className={`relative w-64 h-32 bg-black border-2 rounded-lg overflow-hidden cursor-pointer transition-all
-            duration-300 ${
-            clickedMemberId === member.id && selectedMember ? 'opacity-0 scale-150' :
-            clickedMemberId && !selectedMember ? 'scale-100 opacity-100' :
-            'scale-100'
-            }`}
-            style={{
-            borderColor: 'rgba(220, 38, 38, 0.8)',
-            boxShadow: '0 0 0px rgba(220, 38, 38, 0)',
-            transition: 'all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6)'
-            }}
-            >
-            {/* Glow effect overlay */}
-            <div
-                className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
-                <div
-                    className="absolute -inset-1 bg-red-600 rounded-lg opacity-0 hover:opacity-75 blur-md transition-opacity duration-300">
-                </div>
-            </div>
+        .team-card:hover .border-glow {
+            opacity: 1;
+        }
 
-            <div className="relative z-20 h-full p-4 flex bg-black">
-                <div className="h-full w-1/3">
-                    <div
-                        className="w-16 h-16 rounded-full bg-red-800 flex items-center justify-center text-white font-bold text-xl overflow-hidden">
-                        <img src={`/api/placeholder/160/160`} alt={member.name}
-                            className="w-full h-full object-cover" />
-                    </div>
-                </div>
-                <div className="w-2/3">
-                    <h3 className="text-white font-semibold">{member.name}</h3>
-                    <p className="text-gray-400 text-sm">"{member.nickname}"</p>
-                    <p className="text-red-500 text-sm mt-2">{member.role}</p>
-                </div>
-            </div>
+        .border-glow-inner {
+            position: absolute;
+            inset: -0.125rem;
+            background: linear-gradient(to right, #DC2626, #7F1D1D);
+            opacity: 0;
+            border-radius: 0.5rem;
+            filter: blur(4px);
+            transition: all 0.7s;
+        }
+
+        .team-card:hover .border-glow-inner {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 20;
+            height: 100%;
+            padding: 1rem;
+            display: flex;
+            background-color: black;
+            transition: background-color 0.7s;
+        }
+
+        .team-card:hover .card-content {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .avatar-container {
+            height: 100%;
+            width: 33%;
+        }
+
+        .avatar {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: linear-gradient(to bottom right, #B91C1C, #7F1D1D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+            overflow: hidden;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            transition: all 0.7s;
+        }
+
+        .team-card:hover .avatar {
+            border-color: rgba(239, 68, 68, 0.8);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            transform: scale(1.05);
+            transition: all 0.7s;
+        }
+
+        .team-card:hover .avatar img {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .info-container {
+            width: 67%;
+        }
+
+        .info-container h3 {
+            font-weight: 600;
+        }
+
+        .nickname {
+            color: #9CA3AF;
+            font-size: 0.875rem;
+            transition: color 0.7s;
+        }
+
+        .team-card:hover .nickname {
+            color: #F87171;
+        }
+
+        .role {
+            color: #DC2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+            transition: opacity 0.7s;
+        }
+
+        .team-card:hover .role {
+            opacity: 1;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+            animation: fadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 32rem;
+            background-color: black;
+            border: 2px solid #DC2626;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.4), 0 0 15px rgba(220, 38, 38, 0.2) inset;
+            opacity: 0;
+            transform: scale(0.2);
+            filter: blur(10px);
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+            animation: luxuryZoomIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .modal-bg-glow {
+            position: absolute;
+            inset: -0.125rem;
+            background: linear-gradient(to right, #B91C1C, #7F1D1D);
+            opacity: 0.5;
+            border-radius: 0.5rem;
+            filter: blur(4px);
+            z-index: -10;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #9CA3AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover {
+            color: white;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-avatar {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            background: linear-gradient(to bottom right, #B91C1C, #7F1D1D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid rgba(239, 68, 68, 0.8);
+            box-shadow: 0 0 10px rgba(185, 28, 28, 0.3);
+        }
+
+        .modal-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info {
+            margin-left: 1rem;
+        }
+
+        .modal-info h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .modal-nickname {
+            color: #EF4444;
+            font-weight: 300;
+        }
+
+        .modal-role {
+            color: #D1D5DB;
+            margin-top: 0.25rem;
+            font-weight: 300;
+        }
+
+        .modal-bio {
+            background: linear-gradient(to bottom right, rgba(17, 24, 39, 0.8), rgba(0, 0, 0, 0.8));
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(185, 28, 28, 0.3);
+        }
+
+        .modal-bio p {
+            color: #D1D5DB;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .team-label {
+            color: #9CA3AF;
+        }
+
+        .team-label span {
+            color: #EF4444;
+            font-weight: 500;
+        }
+
+        .close-hint {
+            color: #6B7280;
+            font-size: 0.875rem;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #6B7280;
+            font-size: 0.875rem;
+        }
+
+        .loading-screen {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            animation: spin 2s linear infinite;
+            width: 6rem;
+            height: 6rem;
+            position: relative;
+        }
+
+        .spinner svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .spinner-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background-color: rgba(220, 38, 38, 0.1);
+            filter: blur(1rem);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes luxuryZoomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.2);
+                filter: blur(10px);
+            }
+
+            40% {
+                opacity: 1;
+                filter: blur(0px);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes subtlePulse {
+            0% {
+                box-shadow: 0 0 5px rgba(220, 38, 38, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 15px rgba(220, 38, 38, 0.6);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(220, 38, 38, 0.3);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .team-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal-content {
+                margin: 0 1rem;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .modal-info {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loadingScreen" class="loading-screen">
+        <div class="spinner">
+            <svg viewBox="0 0 100 100">
+                <path d="M35 35 L35 15 L65 15 L65 35 L85 35 L85 65 L65 65 L65 85 L35 85 L35 65 L15 65 L15 35 Z"
+                    fill="none" stroke="#DC2626" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div class="spinner-glow"></div>
         </div>
-        ))}
     </div>
 
-    {selectedMember && (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-30 transition-all duration-500"
-        onClick={handleClose} style={{ animation: 'fadeIn 0.3s ease-out' , }}>
-        <div className="w-full max-w-lg bg-black border-2 border-red-600 rounded-lg p-6 relative transition-all"
-            onClick={(e)=> e.stopPropagation()}
-            style={{
-            animation: `zoomFromPoint 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`,
-            boxShadow: '0 0 25px rgba(220, 38, 38, 0.8)',
-            transformOrigin: `${clickPosition.x}px ${clickPosition.y}px`
-            }}
-            >
-            <button onClick={handleClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
+    <div class="header">
+        <h1><span>Code</span>Red</h1>
+        <p>"The best Scrapyard team in existence."</p>
+    </div>
+
+    <div id="teamContainer" class="team-container"></div>
+
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-bg-glow"></div>
+
+            <button id="closeButton" class="close-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
 
-            <div className="flex items-center mb-6">
-                <div
-                    className="w-24 h-24 rounded-full bg-red-800 flex items-center justify-center overflow-hidden border-2 border-red-500">
-                    <img src={`/api/placeholder/240/240`} alt={selectedMember.name}
-                        className="w-full h-full object-cover" />
+            <div class="modal-header">
+                <div class="modal-avatar">
+                    <img id="modalAvatar" src="" alt="">
                 </div>
-                <div className="ml-4">
-                    <h2 className="text-2xl font-bold text-white">{selectedMember.name}</h2>
-                    <p className="text-red-500">"{selectedMember.nickname}"</p>
-                    <p className="text-gray-400 mt-1">{selectedMember.role}</p>
+                <div class="modal-info">
+                    <h2 id="modalName"></h2>
+                    <p id="modalNickname" class="modal-nickname"></p>
+                    <p id="modalRole" class="modal-role"></p>
                 </div>
             </div>
 
-            <div className="bg-gray-900/50 p-4 rounded-lg">
-                <p className="text-gray-300">{selectedMember.bio}</p>
+            <div class="modal-bio">
+                <p id="modalBio"></p>
             </div>
 
-            <div className="mt-6 flex justify-between">
-                <div className="text-gray-400">
-                    <span className="text-red-500">Code</span>Red Member
+            <div class="modal-footer">
+                <div class="team-label">
+                    <span>Code</span>Red Member
                 </div>
-                <div className="text-gray-500 text-sm">
+                <div class="close-hint">
                     Click outside to close
                 </div>
             </div>
         </div>
     </div>
-    )}
 
-    <style jsx global>
-        {
-            ` @keyframes zoomFromPoint {
-                from {
-                    opacity: 0;
-                    transform: scale(0.1);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes pulse {
-                0% {
-                    box-shadow: 0 0 5px rgba(220, 38, 38, 0.5);
-                }
-
-                50% {
-                    box-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
-                }
-
-                100% {
-                    box-shadow: 0 0 5px rgba(220, 38, 38, 0.5);
-                }
-            }
-
-            .banner-glow {
-                animation: pulse 2s infinite;
-            }
-
-            `
-        }
-    </style>
-
-    <div className="mt-12 text-center text-gray-500 text-sm">
-        <p>© 2025 CodeRed Team</p>
-    </div>
+    <div class="footer">
+<p>© 2025 CodeRed Team</p>
 </div>
-);
-};
 
-export default CodeRedTeamIntro;
+<script>
+    const teamData = [
+        {
+            name: "Alex Morgan",
+            nickname: "Phoenix",
+            role: "Team Leader",
+            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+            bio: "Former special forces operator with a knack for improvised electronics. Alex founded CodeRed after leaving military service, bringing tactical precision and leadership to the team's operations in the Scrapyard."
+        },
+        {
+            name: "Sophia Chen",
+            nickname: "Circuit",
+            role: "Technical Specialist",
+            avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+            bio: "MIT dropout and electronics prodigy. Sophia can hack almost any system and build functioning tech from scrap parts. Her innovations have given CodeRed a technical edge that few Scrapyard teams can match."
+        },
+        {
+            name: "Marcus Johnson",
+            nickname: "Catalyst",
+            role: "Demolitions Expert",
+            avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+            bio: "Former mining engineer with extensive knowledge of explosives and structural weaknesses. Marcus provides the team with controlled chaos when stealth fails and brute force becomes necessary."
+        },
+        {
+            name: "Zara Patel",
+            nickname: "Ghost",
+            role: "Infiltration Specialist",
+            avatar: "https://randomuser.me/api/portraits/women/65.jpg",
+            bio: "Ex-intelligence operative with a talent for disappearing in plain sight. Zara can bypass nearly any security system and extract information without leaving a trace. Her network of contacts throughout the Scrapyard is invaluable."
+        }
+    ];
+
+    const teamContainer = document.getElementById('teamContainer');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalName = document.getElementById('modalName');
+    const modalNickname = document.getElementById('modalNickname');
+    const modalRole = document.getElementById('modalRole');
+    const modalBio = document.getElementById('modalBio');
+    const modalAvatar = document.getElementById('modalAvatar');
+    const closeButton = document.getElementById('closeButton');
+    const loadingScreen = document.getElementById('loadingScreen');
+
+    // Create team cards
+    teamData.forEach(member => {
+        const card = document.createElement('div');
+        card.className = 'team-card';
+
+        card.innerHTML = `
+        <div class="border-glow">
+          <div class="border-glow-inner"></div>
+        </div>
+        <div class="card-content">
+          <div class="avatar-container">
+            <div class="avatar">
+              <img src="${member.avatar}" alt="${member.name}">
+            </div>
+          </div>
+          <div class="info-container">
+            <h3>${member.name}</h3>
+            <p class="nickname">${member.nickname}</p>
+            <p class="role">${member.role}</p>
+          </div>
+        </div>
+      `;
+
+        card.addEventListener('click', () => {
+            openModal(member);
+        });
+
+        teamContainer.appendChild(card);
+    });
+
+    function openModal(member) {
+        const selectedCard = Array.from(document.querySelectorAll('.team-card')).find(card =>
+            card.querySelector('h3').textContent === member.name
+        );
+
+        selectedCard.classList.add('zooming');
+
+        setTimeout(() => {
+            modalName.textContent = member.name;
+            modalNickname.textContent = member.nickname;
+            modalRole.textContent = member.role;
+            modalBio.textContent = member.bio;
+            modalAvatar.src = member.avatar;
+
+            modalOverlay.classList.add('active');
+            selectedCard.classList.remove('zooming');
+        }, 300);
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+    }
+
+    closeButton.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+
+    // Hide loading screen after page loads
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+        }, 1500);
+    });
+</script>
+</body>
+
+</html>
