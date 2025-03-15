@@ -509,32 +509,32 @@
             nickname: "JimJam",
             role: "Team Leader",
             avatar: "jimmy.jpeg",
-            bio: "The backbone of CodeRed., ensuring the team stays on track and motivated. With his strategic planning and leadership, he keeps everyone focused and ready to tackle any challenge. Whether it's managing resources or making tough calls, Jimit leads with confidence."
-                <a href="https://github.com/Jimit-Nahar">GitHub</a>
+            bio: "The backbone of CodeRed., ensuring the team stays on track and motivated. With his strategic planning and leadership, he keeps everyone focused and ready to tackle any challenge. Whether it's managing resources or making tough calls, Jimit leads with confidence.",
+            github: "https://github.com/Jimit-Nahar"
         },
         {
             name: "Vaibhav",
             nickname: "YB",
             role: "Front-end and Back-end Developer",
             avatar: "yb.jpeg",
-            bio: "Vaibhav is the tech powerhouse behind CodeRed., handling both front-end and back-end development. From sleek UI designs to optimized backend systems, he ensures everything runs smoothly. His problem-solving skills make him the go-to for any coding challenge."
-                <a href="https://github.com/Yb-G">GitHub</a>
+            bio: "Vaibhav is the tech powerhouse behind CodeRed., handling both front-end and back-end development. From sleek UI designs to optimized backend systems, he ensures everything runs smoothly. His problem-solving skills make him the go-to for any coding challenge.",
+            github: "https://github.com/Yb-G"
         },
         {
             name: "Veekshith",
             nickname: "Veek",
             role: "AI Developer",
             avatar: "veek.jpeg",
-            bio: "Veekshith is the mastermind behind the AI in CodeRed.’s projects. Passionate about machine learning and automation, he pushes the boundaries of AI development. His innovations bring intelligence and efficiency to the team’s work."
-                <a href="https://github.com/Armourcape">GitHub</a>
+            bio: "Veekshith is the mastermind behind the AI in CodeRed.’s projects. Passionate about machine learning and automation, he pushes the boundaries of AI development. His innovations bring intelligence and efficiency to the team’s work.",
+            github: ""
         },
         {
             name: "Snithik",
             nickname: "Snikki",
             role: "Resource Collector",
             avatar: "snikki.jpeg",
-            bio: "Snithik is the ultimate strategist when it comes to gathering and managing resources. Whether it’s finding the best tools, data, or support, he ensures the team has everything needed to succeed. His efficiency keeps CodeRed. ahead of the competition."
-                <a href="https://github.com/JustCallMe-Sni">GitHub</a>
+            bio: "Snithik is the ultimate strategist when it comes to gathering and managing resources. Whether it’s finding the best tools, data, or support, he ensures the team has everything needed to succeed. His efficiency keeps CodeRed. ahead of the competition.",
+            github: "https://github.com/JustCallMe-Sni"
         }
     ];
 
@@ -567,6 +567,7 @@
             <h3>${member.name}</h3>
             <p class="nickname">${member.nickname}</p>
             <p class="role">${member.role}</p>
+            ${member.github ? `<a href="${member.github}" target="_blank">GitHub</a>` : ''}
           </div>
         </div>
       `;
@@ -589,7 +590,7 @@
             modalName.textContent = member.name;
             modalNickname.textContent = member.nickname;
             modalRole.textContent = member.role;
-            modalBio.textContent = member.bio;
+            modalBio.innerHTML = `${member.bio} ${member.github ? `<br><a href='${member.github}' target='_blank'>GitHub</a>` : ''}`;
             modalAvatar.src = member.avatar;
 
             modalOverlay.classList.add('active');
@@ -615,6 +616,7 @@
         }, 1500);
     });
 </script>
+
 </body>
 
 </html>
